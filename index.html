@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>鹈鹕骑自行车 · 静态展示页</title>
+<meta name="description" content="鹈鹕骑自行车 SVG 插画的纯静态展示页，支持深浅色主题与移动端浏览。">
+<style>
+  :root {
+    --bg: #eef2f7;
+    --card: #ffffff;
+    --text: #1f2733;
+    --muted: #5b6674;
+    --border: #d8e0ea;
+    --accent: #2f6fd0;
+    --accent-text: #ffffff;
+    --shadow: 0 6px 20px rgba(23, 40, 66, .10);
+  }
+
+  html[data-theme="dark"] {
+    --bg: #151a21;
+    --card: #1e242d;
+    --text: #e8edf4;
+    --muted: #9aa7b6;
+    --border: #2e3742;
+    --accent: #6fa4f0;
+    --accent-text: #10151b;
+    --shadow: 0 6px 20px rgba(0, 0, 0, .45);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body { max-width: 100%; }
+
+  body {
+    margin: 0;
+    padding: 24px 16px 40px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    line-height: 1.6;
+    transition: background .25s ease, color .25s ease;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  header { margin-bottom: 20px; }
+
+  h1 {
+    margin: 0 0 8px;
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    line-height: 1.25;
+  }
+
+  .subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: clamp(.9rem, 3.4vw, 1rem);
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  button, .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--card);
+    color: var(--text);
+    font: inherit;
+    font-size: .95rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform .15s ease, border-color .15s ease;
+  }
+
+  .button.primary {
+    border-color: transparent;
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+
+  button:hover, .button:hover { transform: translateY(-1px); }
+
+  button:focus-visible, .button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .stage {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--card);
+    box-shadow: var(--shadow);
+  }
+
+  .stage img, .stage svg {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  footer {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: .85rem;
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <h1>鹈鹕骑自行车</h1>
+      <p class="subtitle">一只鹈鹕蹬着自行车穿过街头，下面是它的 SVG 插画展示。</p>
+      <div class="actions">
+        <button type="button" id="theme-toggle" aria-live="polite">切换深色模式</button>
+        <a class="button primary" href="./pelican-on-bicycle.svg" download="pelican-on-bicycle.svg">下载 SVG</a>
+      </div>
+    </header>
+
+    <main class="stage">
+      <img id="pelican" src="./pelican-on-bicycle.svg" alt="鹈鹕骑自行车的插画"
+           onerror="this.hidden = true; document.getElementById('fallback').hidden = false;">
+
+      <div id="fallback" hidden>
+        <svg viewBox="0 0 320 200" role="img" aria-label="鹈鹕骑自行车占位插画">
+          <circle cx="90" cy="150" r="32" fill="none" stroke="currentColor" stroke-width="5"/>
+          <circle cx="230" cy="150" r="32" fill="none" stroke="currentColor" stroke-width="5"/>
+          <path d="M90 150 L150 150 L185 96 L120 96 Z" fill="none" stroke="currentColor" stroke-width="5"/>
+          <path d="M150 150 L170 96" stroke="currentColor" stroke-width="5"/>
+          <path d="M20 100 q26 -34 58 -14 q20 12 6 32 q-12 18 -40 16" fill="none" stroke="currentColor" stroke-width="5"/>
+          <circle cx="70" cy="72" r="5" fill="currentColor"/>
+          <path d="M106 96 q10 -22 30 -18" fill="none" stroke="currentColor" stroke-width="5"/>
+        </svg>
+      </div>
+    </main>
+
+    <footer>纯静态页面，无外部依赖；点击“下载 SVG”可保存原始矢量插画。</footer>
+  </div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var toggle = document.getElementById('theme-toggle');
+    var stored = null;
+    try { stored = localStorage.getItem('theme'); } catch (e) {}
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    function apply(theme) {
+      root.setAttribute('data-theme', theme);
+      toggle.textContent = theme === 'dark' ? '切换浅色模式' : '切换深色模式';
+    }
+
+    apply(stored || (prefersDark ? 'dark' : 'light'));
+
+    toggle.addEventListener('click', function () {
+      var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      apply(next);
+      try { localStorage.setItem('theme', next); } catch (e) {}
+    });
+  })();
+</script>
+</body>
+</html>
